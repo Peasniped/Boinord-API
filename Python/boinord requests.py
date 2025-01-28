@@ -15,8 +15,8 @@ def fetch_apartment_info(username: str, password: str) -> dict:
 
     Returns:
         dict: A dictionary containing apartment information if successful, 
-        where keys are apartment IDs and values are dicts with keys "priority" and "variant_string"
-        containing waitlist priority number and easily readable variant details, ex "Annebergvej - Lejlighed - 4v".
+        where keys are apartment IDs and values are dicts with keys "position" and "variant_string"
+        containing waitlist position number and easily readable variant details, ex "Annebergvej - Lejlighed - 4v".
 
     Raises:
         LoginException:   If login fails due to invalid credentials.
@@ -49,7 +49,7 @@ def fetch_apartment_info(username: str, password: str) -> dict:
                     tenancy_type = match["TenancyType"]             # Boligtype ID (1: Lejlighed, 2: Rækkehus/hus)
                     tenancy_type_text = wish["TenancyTypeText"]     # Boligtype i tekst
                     tenancy_lm_type = match["TenancyLmType"]        # Boligklasse (1: Familiebolig)
-                    priority = match["Prio"]                        # Your spot on the waitlist
+                    position = match["Prio"]                        # Your position on the waitlist
 
                     # Format the Apartment variant ID - Unique identifier
                     apartment_id = f"{company_no}-{department_no}-{tenancy_type}-{tenancy_lm_type}-{rooms}"
@@ -57,7 +57,7 @@ def fetch_apartment_info(username: str, password: str) -> dict:
                     # Format the apartment variant string
                     variant_string = f"{department_name} - {tenancy_type_text} - {rooms}v"
 
-                    apartments[apartment_id] = {"priority": priority, "variant_string": variant_string}
+                    apartments[apartment_id] = {"position": position, "variant_string": variant_string}
                     
             return apartments
         else:
@@ -71,20 +71,20 @@ def print_apartments(apartments: dict) -> None:
 
     Args:
         apartments (dict): A dictionary containing apartment information if successful, 
-        where keys are apartment IDs and values are dicts with keys "priority" and "variant_string"
-        containing waitlist priority number and easily readable variant details, ex "Annebergvej - Lejlighed - 4v".
+        where keys are apartment IDs and values are dicts with keys "position" and "variant_string"
+        containing waitlist position and easily readable variant details, ex "Annebergvej - Lejlighed - 4v".
         (Obtained from fetch_apartment_info())
 
     Returns:
         None
     """
     for apartment_id in apartments:
-        priority    = apartments[apartment_id]["priority"]
+        position    = apartments[apartment_id]["position"]
         variant     = apartments[apartment_id]["variant_string"]
 
         print(f"Apartment Variant ID: {apartment_id}")
         print(f"Apartment Variant: {variant}")
-        print(f"Waitlist Position: {priority}")
+        print(f"Waitlist Position: {position}")
         print("-" * 50)
 
 if __name__ == "__main__":
